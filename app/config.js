@@ -6,6 +6,7 @@
 			new Route('histogram', 'Histogram / Open File', 'red'),
 			new Route('ekualisasi', 'Ekualisasi Histogram', 'orange'),
 			new Route('binary', 'Binary (otsu)', 'aqua'),
+			new Route('gauss', 'Gaussian Blur', 'aqua'),
 		];
 	};
 	

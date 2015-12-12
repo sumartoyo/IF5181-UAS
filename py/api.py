@@ -5,6 +5,7 @@ import os
 import time
 
 import gambar
+import konvolusi
 
 def main():
     method = sys.argv[1]
@@ -48,6 +49,10 @@ def main():
         threshold = gambar.otsu(hist, gray.shape[0]*gray.shape[1])
         gambar.save(gray, dir+'gray.jpg')
         gambar.save(gray <= threshold, dir+'binary.jpg')
+    
+    elif method == 'gauss':
+        img = gambar.read(input)
+        gambar.save(konvolusi.gaussian(img), dir+'gauss.jpg')
 
 def json_save(obj, path):
     f = open(path, 'w')

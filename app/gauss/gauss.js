@@ -1,14 +1,14 @@
 (function() {
-	angular.module('app').controller('BinaryController', BinaryController);
+	angular.module('app').controller('GaussController', GaussController);
 
-	BinaryController.$inject = ['$scope', 'mainService'];
+	GaussController.$inject = ['$scope', 'mainService'];
 	
-	function BinaryController($scope, mainService) {
+	function GaussController($scope, mainService) {
 		var vm = this;
 		
 		var init = function() {
-			vm.srcGray = mainService.srcEmpty;
-			vm.srcBinary = mainService.srcEmpty;
+			vm.src = mainService.srcEmpty;
+			vm.srcGauss = mainService.srcEmpty;
 			
 			if (mainService.file.input != '') {
 				// setup loading
@@ -19,20 +19,20 @@
 				// laksanakan
 				function laksanakan() {
 					$scope.$apply(function() {
-						vm.srcGray = 'file://'+mainService.file.dir()+'gray.jpg';
-						vm.srcBinary = 'file://'+mainService.file.dir()+'binary.jpg';
+						vm.src = 'file://'+mainService.file.input;
+						vm.srcGauss = 'file://'+mainService.file.dir()+'gauss.jpg';
 						
 						mainService.loading.hide();
 					});
 				}
 				
 				// call python
-				mainService.file.readable('binary.jpg', function(err) {
+				mainService.file.readable('gauss.jpg', function(err) {
 					if (err) {
 						mainService.loading.show();
 						
 						shell = py.run([
-							'otsu',
+							'gauss',
 							mainService.file.input,
 							mainService.file.id,
 						], undefined, undefined, function() {

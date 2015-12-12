@@ -27,6 +27,9 @@
 		};
 		
 		var init = function() {
+			vm.srcGray = mainService.srcEmpty;
+			vm.srcEqualized = mainService.srcEmpty;
+			
 			if (mainService.file.input != '') {
 				// setup loading
 				mainService.loading.onCanceled = function() {
@@ -42,8 +45,8 @@
 						vm.chart.gray.data[0] = histGray;
 						vm.chart.equalized.data[0] = histEqualized;
 						
-						$('#imgGray').attr('src', 'file://'+mainService.file.dir()+'gray.jpg');
-						$('#imgEqualized').attr('src', 'file://'+mainService.file.dir()+'equalized.jpg');
+						vm.srcGray = 'file://'+mainService.file.dir()+'gray.jpg';
+						vm.srcEqualized = 'file://'+mainService.file.dir()+'equalized.jpg';
 						
 						mainService.loading.hide();
 					});

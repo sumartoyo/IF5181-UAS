@@ -1,12 +1,11 @@
-var varMainService = {};
-
 (function() {
 	angular.module('app').factory('mainService', mainService);
 	
 	function mainService() {
 		return new (function() {
 			var self = this;
-			varMainService = self;
+			
+			self.srcEmpty = 'img/empty.png';
 			
 			self.file = new (function() {
 				var file = this;

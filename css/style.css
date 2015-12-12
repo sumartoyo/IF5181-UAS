@@ -45,3 +45,9 @@ h6,
 .modal-dialog {
 	margin-top: 15%;
 }
+
+.content img {
+	display: block;
+	max-width: 100%;
+	margin: 0 auto;
+}

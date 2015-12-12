@@ -24,6 +24,8 @@
 		})();
 		
 		var init = function() {
+			vm.src = mainService.srcEmpty;
+			
 			if (mainService.file.input != '') {
 				// setup loading
 				mainService.loading.onCanceled = function() {
@@ -42,7 +44,8 @@
 						vm.chart.data[1] = histogram.g;
 						vm.chart.data[2] = histogram.b;
 						
-						$('#img').attr('src', 'file://'+mainService.file.input);
+						vm.path = mainService.file.input;
+						vm.src = 'file://'+mainService.file.input;
 						
 						mainService.loading.hide();
 					});
@@ -68,7 +71,6 @@
 		};
 		
 		vm.onFileChanged = function() {
-			$('#img').removeAttr('src');
 			mainService.file.load(vm.path);
 			init();
 		};
