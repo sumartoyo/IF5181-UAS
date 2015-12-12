@@ -10,7 +10,6 @@ var varMainService = {};
 			
 			self.file = new (function() {
 				var file = this;
-				var os = require('os');
 				var fs = require('fs');
 				
 				file.clear = function() {
@@ -24,8 +23,7 @@ var varMainService = {};
 				};
 				
 				file.dir = function() {
-					// return os.tmpDir() + '\\' + file.id + '\\';
-					return 'D:\\Kuliah\\pola\\uas\\py\\' + file.id + '\\';
+					return (process.env.HOME || process.env.USERPROFILE) + '\\.IF5181-dimas\\' + file.id + '\\';
 				};
 				
 				file.readable = function(name, callback) {

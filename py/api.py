@@ -1,5 +1,5 @@
 import sys
-import tempfile
+import shutil
 import json
 import os
 import time
@@ -10,10 +10,14 @@ def main():
     method = sys.argv[1]
     input = sys.argv[2]
     id = sys.argv[3]
-    dir = tempfile.gettempdir()+'\\'+id+'\\'
-    dir = 'D:\\Kuliah\\pola\\uas\\py\\'+id+'\\'
+    home = os.path.expanduser('~')+'\\.IF5181-dimas\\'
+    dir = home+id+'\\'
 
     if not os.path.isdir(dir):
+        if os.path.isdir(home):
+            shutil.rmtree(home, ignore_errors=True)
+        if not os.path.isdir(home):
+            os.mkdir(home)
         os.mkdir(dir)
 
     if method == 'histogram':
