@@ -1,0 +1,10 @@
+{
+  "name": "uas",
+  "main": "index.html",
+  "window": {
+    "width": 1024,
+    "min_width": 1024,
+    "height": 600,
+    "min_height": 600
+  }
+}

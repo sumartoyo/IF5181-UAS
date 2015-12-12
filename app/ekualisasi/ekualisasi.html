@@ -1,0 +1,40 @@
+<div class="box box-primary">
+	<div class="box-body">
+		<div class="row">
+			<div class="col-md-6">
+				<p style="text-align:center">Grayscale</p>
+			</div>
+			<div class="col-md-6">
+				<p style="text-align:center">Equalized</p>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6">
+				<div style="width:100%">
+					<canvas class="chart chart-line"
+						chart-series="vm.chart.gray.series"
+						chart-data="vm.chart.gray.data"
+						chart-labels="vm.chart.gray.labels">
+					</canvas>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div style="width:100%">
+					<canvas class="chart chart-line"
+						chart-series="vm.chart.equalized.series"
+						chart-data="vm.chart.equalized.data"
+						chart-labels="vm.chart.equalized.labels">
+					</canvas>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6">
+				<img id="imgGray" style="display:block;max-width:100%">
+			</div>
+			<div class="col-md-6">
+				<img id="imgEqualized" style="display:block;max-width:100%">
+			</div>
+		</div>
+	</div>
+</div>

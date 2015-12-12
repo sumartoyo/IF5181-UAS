@@ -1,0 +1,36 @@
+<div class="box box-primary">
+	<div class="box-header with-border">
+		<div class="row">
+			<div class="col-md-12">
+				<button class="btn btn-default" onclick="$('#fileDialog').trigger('click')">Open File</button>
+				<input type="file" id="fileDialog" accept=".jpeg,.jpg,.png" style="display:none">
+				<input type="text" id="filePath" style="display:none" ng-model="vm.path" ng-change="vm.onFileChanged()">
+				<script>
+					$('#fileDialog').change(function(evt) {
+						var filePath = $('#filePath');
+						filePath.val($(this).val());
+						filePath.trigger('input');
+						$(this).val('');
+					});
+				</script>
+			</div>
+		</div>
+	</div>
+	<div class="box-body">
+		<div class="row">
+			<div class="col-md-6">
+				<div style="width:100%">
+					<canvas class="chart chart-line"
+						chart-series="vm.chart.series"
+						chart-data="vm.chart.data"
+						chart-labels="vm.chart.labels"
+						chart-legend="true">
+					</canvas>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<img id="img" style="display:block;max-width:100%">
+			</div>
+		</div>
+	</div>
+</div>

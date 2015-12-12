@@ -1,0 +1,47 @@
+body {
+	font-family: 'Segoe UI', sans-serif;
+	overflow-y: scroll;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+	font-family: sans-serif;
+}
+
+.main-sidebar {
+	padding-top: 0;
+}
+
+.sidebar-menu {
+	padding-top: 15px;
+}
+
+#title {
+	background-color: #367fa9;
+	color: #fff;
+	font-size: 20px;
+	line-height: 50px;
+	text-align: center;
+	text-transform: uppercase;
+	margin-bottom: 0;
+	font-family: sans-serif;
+}
+
+.skin-blue .sidebar-menu>li.active>a {
+	background-color: #374850;
+	color: #fff;
+}
+
+.modal-dialog {
+	margin-top: 15%;
+}

@@ -1,0 +1,25 @@
+{
+  "name": "uas",
+  "version": "0.0.0",
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "AdminLTE": "admin-lte#~2.3.2",
+    "components-font-awesome": "~4.5.0",
+    "Ionicons": "ionicons#~2.0.1",
+    "angular": "~1.4.8",
+    "angular-route": "~1.4.8",
+	"angular-chart.js": "~0.8.6"
+  }
+}
