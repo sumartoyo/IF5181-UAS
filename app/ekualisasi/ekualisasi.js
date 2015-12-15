@@ -1,12 +1,11 @@
 (function() {
 	angular.module('app').controller('EkualisasiController', EkualisasiController);
 	
-	EkualisasiController.$inject = ['config', 'fileService', 'loadingService', 'pyService'];
+	EkualisasiController.$inject = ['config', 'fileService', 'pyService'];
 
-	function EkualisasiController(config, fileService, loadingService, pyService) {
+	function EkualisasiController(config, fileService, pyService) {
 		
 		var vm = this;
-		var shell = {};
 		
 		var createChart = function(name) {
 			
@@ -29,34 +28,9 @@
 		};
 		
 		var init = function() {
-			
 			vm.srcGray = config.srcEmpty;
 			vm.srcEqualized = config.srcEmpty;
-			
-			if (fileService.input != '') {
-				
-				fileService.isReadable('histogram_equalized.json')
-					.then(function() {
-						laksanakan();
-					})
-					.catch(function(error) {
-						
-						var py = pyService.run([
-							'equalize',
-							fileService.input,
-							fileService.id,
-						]);
-						
-						py.promise.finally(function() {
-							laksanakan();
-						});
-						
-						loadingService.show()
-							.catch(function() {
-								pyService.kill(py.shell);
-							});
-					});
-			}
+			pyService.call('histogram_equalized.json', 'equalize').then(laksanakan);
 		};
 		
 		var laksanakan = function() {
@@ -69,8 +43,6 @@
 			
 			vm.srcGray = 'file://'+fileService.dir()+'gray.jpg';
 			vm.srcEqualized = 'file://'+fileService.dir()+'equalized.jpg';
-			
-			loadingService.hide();
 		};
 		
 		init();

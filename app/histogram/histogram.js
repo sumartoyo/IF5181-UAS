@@ -1,9 +1,9 @@
 (function() {
 	angular.module('app').controller('HistogramController', HistogramController);
 
-	HistogramController.$inject = ['config', 'fileService', 'loadingService', 'pyService'];
+	HistogramController.$inject = ['config', 'fileService', 'pyService'];
 	
-	function HistogramController(config, fileService, loadingService, pyService) {
+	function HistogramController(config, fileService, pyService) {
 		
 		var vm = this;
 		var py = {};
@@ -26,34 +26,13 @@
 		})();
 		
 		var init = function() {
-			
 			vm.src = config.srcEmpty;
-			
-			if (fileService.input != '') {
-				
-				fileService.isReadable('histogram.json')
-					.then(function() {
-						laksanakan();
-					})
-					.catch(function(error) {
-						
-						var py = pyService.run([
-							'histogram',
-							fileService.input,
-							fileService.id,
-						]);
-						
-						py.promise.finally(function() {
-							laksanakan();
-						});
-						
-						loadingService.show()
-							.catch(function() {
-								pyService.kill(py.shell);
-								fileService.clear();
-							});
-					});
-			}
+			pyService.call('histogram.json', 'histogram')
+				.then(laksanakan)
+				.catch(function() {
+					fileService.clear();
+					vm.path = 'Error';
+				});
 		};
 		
 		var laksanakan = function() {
@@ -66,8 +45,6 @@
 			
 			vm.path = fileService.input;
 			vm.src = 'file://'+fileService.input;
-			
-			loadingService.hide();
 		};
 		
 		vm.onFileChanged = function() {
