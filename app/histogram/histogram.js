@@ -1,15 +1,17 @@
 (function() {
 	angular.module('app').controller('HistogramController', HistogramController);
 
-	HistogramController.$inject = ['mainService', 'pyService'];
+	HistogramController.$inject = ['config', 'fileService', 'loadingService', 'pyService'];
 	
-	function HistogramController(mainService, pyService) {
+	function HistogramController(config, fileService, loadingService, pyService) {
+		
 		var vm = this;
 		var py = {};
 		
 		vm.path = '';
 		
 		vm.chart = new (function() {
+			
 			this.series = ['R', 'G', 'B'];
 			this.data = [[], [], []];
 			this.labels = [];
@@ -24,48 +26,52 @@
 		})();
 		
 		var init = function() {
-			vm.src = mainService.srcEmpty;
 			
-			if (mainService.file.input != '') {
-				mainService.file.readable('histogram.json')
+			vm.src = config.srcEmpty;
+			
+			if (fileService.input != '') {
+				
+				fileService.isReadable('histogram.json')
 					.then(function() {
 						laksanakan();
 					})
 					.catch(function(error) {
+						
 						var py = pyService.run([
 							'histogram',
-							mainService.file.input,
-							mainService.file.id,
+							fileService.input,
+							fileService.id,
 						]);
 						
 						py.promise.finally(function() {
 							laksanakan();
 						});
 						
-						mainService.loading.show()
+						loadingService.show()
 							.catch(function() {
 								pyService.kill(py.shell);
-								mainService.file.clear();
+								fileService.clear();
 							});
 					});
 			}
 		};
 		
 		var laksanakan = function() {
-			var histogram = require(mainService.file.dir()+'histogram.json');
+			
+			var histogram = require(fileService.dir()+'histogram.json');
 			
 			vm.chart.data[0] = histogram.r;
 			vm.chart.data[1] = histogram.g;
 			vm.chart.data[2] = histogram.b;
 			
-			vm.path = mainService.file.input;
-			vm.src = 'file://'+mainService.file.input;
+			vm.path = fileService.input;
+			vm.src = 'file://'+fileService.input;
 			
-			mainService.loading.hide();
+			loadingService.hide();
 		};
 		
 		vm.onFileChanged = function() {
-			mainService.file.load(vm.path);
+			fileService.load(vm.path);
 			init();
 		};
 		

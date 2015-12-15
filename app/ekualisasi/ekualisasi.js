@@ -1,13 +1,15 @@
 (function() {
 	angular.module('app').controller('EkualisasiController', EkualisasiController);
 	
-	EkualisasiController.$inject = ['mainService', 'pyService'];
+	EkualisasiController.$inject = ['config', 'fileService', 'loadingService', 'pyService'];
 
-	function EkualisasiController(mainService, pyService) {
+	function EkualisasiController(config, fileService, loadingService, pyService) {
+		
 		var vm = this;
 		var shell = {};
 		
 		var createChart = function(name) {
+			
 			this.series = [name];
 			this.data = [[]];
 			this.labels = [];
@@ -27,26 +29,29 @@
 		};
 		
 		var init = function() {
-			vm.srcGray = mainService.srcEmpty;
-			vm.srcEqualized = mainService.srcEmpty;
 			
-			if (mainService.file.input != '') {
-				mainService.file.readable('histogram_equalized.json')
+			vm.srcGray = config.srcEmpty;
+			vm.srcEqualized = config.srcEmpty;
+			
+			if (fileService.input != '') {
+				
+				fileService.isReadable('histogram_equalized.json')
 					.then(function() {
 						laksanakan();
 					})
 					.catch(function(error) {
+						
 						var py = pyService.run([
 							'equalize',
-							mainService.file.input,
-							mainService.file.id,
+							fileService.input,
+							fileService.id,
 						]);
 						
 						py.promise.finally(function() {
 							laksanakan();
 						});
 						
-						mainService.loading.show()
+						loadingService.show()
 							.catch(function() {
 								pyService.kill(py.shell);
 							});
@@ -55,16 +60,17 @@
 		};
 		
 		var laksanakan = function() {
-			var histGray = require(mainService.file.dir()+'histogram_gray.json');
-			var histEqualized = require(mainService.file.dir()+'histogram_equalized.json');
+			
+			var histGray = require(fileService.dir()+'histogram_gray.json');
+			var histEqualized = require(fileService.dir()+'histogram_equalized.json');
 			
 			vm.chart.gray.data[0] = histGray;
 			vm.chart.equalized.data[0] = histEqualized;
 			
-			vm.srcGray = 'file://'+mainService.file.dir()+'gray.jpg';
-			vm.srcEqualized = 'file://'+mainService.file.dir()+'equalized.jpg';
+			vm.srcGray = 'file://'+fileService.dir()+'gray.jpg';
+			vm.srcEqualized = 'file://'+fileService.dir()+'equalized.jpg';
 			
-			mainService.loading.hide();
+			loadingService.hide();
 		};
 		
 		init();

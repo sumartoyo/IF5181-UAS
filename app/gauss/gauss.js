@@ -1,32 +1,36 @@
 (function() {
 	angular.module('app').controller('GaussController', GaussController);
 
-	GaussController.$inject = ['mainService', 'pyService'];
+	GaussController.$inject = ['config', 'fileService', 'loadingService', 'pyService'];
 	
-	function GaussController(mainService, pyService) {
+	function GaussController(config, fileService, loadingService, pyService) {
+		
 		var vm = this;
 		
 		var init = function() {
-			vm.src = mainService.srcEmpty;
-			vm.srcGauss = mainService.srcEmpty;
 			
-			if (mainService.file.input != '') {
-				mainService.file.readable('gauss.jpg')
+			vm.src = config.srcEmpty;
+			vm.srcGauss = config.srcEmpty;
+			
+			if (fileService.input != '') {
+				
+				fileService.isReadable('gauss.jpg')
 					.then(function() {
 						laksanakan();
 					})
 					.catch(function(error) {
+						
 						var py = pyService.run([
 							'gauss',
-							mainService.file.input,
-							mainService.file.id,
+							fileService.input,
+							fileService.id,
 						]);
 						
 						py.promise.finally(function() {
 							laksanakan();
 						});
 						
-						mainService.loading.show()
+						loadingService.show()
 							.catch(function() {
 								pyService.kill(py.shell);
 							});
@@ -35,10 +39,11 @@
 		};
 		
 		var laksanakan = function() {
-			vm.src = 'file://'+mainService.file.input;
-			vm.srcGauss = 'file://'+mainService.file.dir()+'gauss.jpg';
 			
-			mainService.loading.hide();
+			vm.src = 'file://'+fileService.input;
+			vm.srcGauss = 'file://'+fileService.dir()+'gauss.jpg';
+			
+			loadingService.hide();
 		};
 		
 		init();

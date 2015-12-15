@@ -26,5 +26,7 @@
 				script: 'py\\api.py',
 			}
 		};
+		
+		this.srcEmpty = 'img/empty.png';
 	};
 })();
