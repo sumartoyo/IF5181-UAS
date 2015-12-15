@@ -1,9 +1,9 @@
 (function() {
 	angular.module('app').controller('BinaryController', BinaryController);
 
-	BinaryController.$inject = ['$scope', 'mainService'];
+	BinaryController.$inject = ['mainService', 'pyService'];
 	
-	function BinaryController($scope, mainService) {
+	function BinaryController(mainService, pyService) {
 		var vm = this;
 		
 		var init = function() {
@@ -11,38 +11,34 @@
 			vm.srcBinary = mainService.srcEmpty;
 			
 			if (mainService.file.input != '') {
-				// setup loading
-				mainService.loading.onCanceled = function() {
-					py.kill(shell);
-				};
-				
-				// laksanakan
-				function laksanakan() {
-					$scope.$apply(function() {
-						vm.srcGray = 'file://'+mainService.file.dir()+'gray.jpg';
-						vm.srcBinary = 'file://'+mainService.file.dir()+'binary.jpg';
-						
-						mainService.loading.hide();
-					});
-				}
-				
-				// call python
-				mainService.file.readable('binary.jpg', function(err) {
-					if (err) {
-						mainService.loading.show();
-						
-						shell = py.run([
+				mainService.file.readable('binary.jpg')
+					.then(function() {
+						laksanakan();
+					})
+					.catch(function(error) {
+						var py = pyService.run([
 							'otsu',
 							mainService.file.input,
 							mainService.file.id,
-						], undefined, undefined, function() {
+						]);
+						
+						py.promise.finally(function() {
 							laksanakan();
 						});
-					} else {
-						laksanakan();
-					}
-				});
+						
+						mainService.loading.show()
+							.catch(function() {
+								pyService.kill(py.shell);
+							});
+					});
 			}
+		};
+		
+		var laksanakan = function() {
+			vm.srcGray = 'file://'+mainService.file.dir()+'gray.jpg';
+			vm.srcBinary = 'file://'+mainService.file.dir()+'binary.jpg';
+			
+			mainService.loading.hide();
 		};
 		
 		init();

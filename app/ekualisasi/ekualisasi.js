@@ -1,13 +1,13 @@
 (function() {
 	angular.module('app').controller('EkualisasiController', EkualisasiController);
 	
-	EkualisasiController.$inject = ['$scope', 'mainService'];
+	EkualisasiController.$inject = ['mainService', 'pyService'];
 
-	function EkualisasiController($scope, mainService) {
+	function EkualisasiController(mainService, pyService) {
 		var vm = this;
 		var shell = {};
 		
-		function createChart(name) {
+		var createChart = function(name) {
 			this.series = [name];
 			this.data = [[]];
 			this.labels = [];
@@ -19,7 +19,7 @@
 					this.labels.push('');
 				}
 			}
-		}
+		};
 		
 		vm.chart = {
 			gray: new createChart('Grayscale'),
@@ -31,44 +31,40 @@
 			vm.srcEqualized = mainService.srcEmpty;
 			
 			if (mainService.file.input != '') {
-				// setup loading
-				mainService.loading.onCanceled = function() {
-					py.kill(shell);
-				};
-				
-				// laksanakan
-				function laksanakan() {
-					$scope.$apply(function() {
-						var histGray = require(mainService.file.dir()+'histogram_gray.json');
-						var histEqualized = require(mainService.file.dir()+'histogram_equalized.json');
-						
-						vm.chart.gray.data[0] = histGray;
-						vm.chart.equalized.data[0] = histEqualized;
-						
-						vm.srcGray = 'file://'+mainService.file.dir()+'gray.jpg';
-						vm.srcEqualized = 'file://'+mainService.file.dir()+'equalized.jpg';
-						
-						mainService.loading.hide();
-					});
-				}
-				
-				// call python
-				mainService.file.readable('histogram_equalized.json', function(err) {
-					if (err) {
-						mainService.loading.show();
-						
-						shell = py.run([
+				mainService.file.readable('histogram_equalized.json')
+					.then(function() {
+						laksanakan();
+					})
+					.catch(function(error) {
+						var py = pyService.run([
 							'equalize',
 							mainService.file.input,
 							mainService.file.id,
-						], undefined, undefined, function() {
+						]);
+						
+						py.promise.finally(function() {
 							laksanakan();
 						});
-					} else {
-						laksanakan();
-					}
-				});
+						
+						mainService.loading.show()
+							.catch(function() {
+								pyService.kill(py.shell);
+							});
+					});
 			}
+		};
+		
+		var laksanakan = function() {
+			var histGray = require(mainService.file.dir()+'histogram_gray.json');
+			var histEqualized = require(mainService.file.dir()+'histogram_equalized.json');
+			
+			vm.chart.gray.data[0] = histGray;
+			vm.chart.equalized.data[0] = histEqualized;
+			
+			vm.srcGray = 'file://'+mainService.file.dir()+'gray.jpg';
+			vm.srcEqualized = 'file://'+mainService.file.dir()+'equalized.jpg';
+			
+			mainService.loading.hide();
 		};
 		
 		init();

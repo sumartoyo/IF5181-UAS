@@ -1,9 +1,9 @@
 (function() {
 	angular.module('app').controller('GaussController', GaussController);
 
-	GaussController.$inject = ['$scope', 'mainService'];
+	GaussController.$inject = ['mainService', 'pyService'];
 	
-	function GaussController($scope, mainService) {
+	function GaussController(mainService, pyService) {
 		var vm = this;
 		
 		var init = function() {
@@ -11,38 +11,34 @@
 			vm.srcGauss = mainService.srcEmpty;
 			
 			if (mainService.file.input != '') {
-				// setup loading
-				mainService.loading.onCanceled = function() {
-					py.kill(shell);
-				};
-				
-				// laksanakan
-				function laksanakan() {
-					$scope.$apply(function() {
-						vm.src = 'file://'+mainService.file.input;
-						vm.srcGauss = 'file://'+mainService.file.dir()+'gauss.jpg';
-						
-						mainService.loading.hide();
-					});
-				}
-				
-				// call python
-				mainService.file.readable('gauss.jpg', function(err) {
-					if (err) {
-						mainService.loading.show();
-						
-						shell = py.run([
+				mainService.file.readable('gauss.jpg')
+					.then(function() {
+						laksanakan();
+					})
+					.catch(function(error) {
+						var py = pyService.run([
 							'gauss',
 							mainService.file.input,
 							mainService.file.id,
-						], undefined, undefined, function() {
+						]);
+						
+						py.promise.finally(function() {
 							laksanakan();
 						});
-					} else {
-						laksanakan();
-					}
-				});
+						
+						mainService.loading.show()
+							.catch(function() {
+								pyService.kill(py.shell);
+							});
+					});
 			}
+		};
+		
+		var laksanakan = function() {
+			vm.src = 'file://'+mainService.file.input;
+			vm.srcGauss = 'file://'+mainService.file.dir()+'gauss.jpg';
+			
+			mainService.loading.hide();
 		};
 		
 		init();

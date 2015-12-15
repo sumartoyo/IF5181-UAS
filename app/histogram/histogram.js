@@ -1,11 +1,11 @@
 (function() {
 	angular.module('app').controller('HistogramController', HistogramController);
 
-	HistogramController.$inject = ['$scope', 'mainService'];
+	HistogramController.$inject = ['mainService', 'pyService'];
 	
-	function HistogramController($scope, mainService) {
+	function HistogramController(mainService, pyService) {
 		var vm = this;
-		var shell = {};
+		var py = {};
 		
 		vm.path = '';
 		
@@ -27,47 +27,41 @@
 			vm.src = mainService.srcEmpty;
 			
 			if (mainService.file.input != '') {
-				// setup loading
-				mainService.loading.onCanceled = function() {
-					$scope.$apply(function() {
-						py.kill(shell);
-						mainService.file.clear();
-					});
-				};
-				
-				// laksanakan
-				function laksanakan() {
-					$scope.$apply(function() {
-						var histogram = require(mainService.file.dir()+'histogram.json');
-						
-						vm.chart.data[0] = histogram.r;
-						vm.chart.data[1] = histogram.g;
-						vm.chart.data[2] = histogram.b;
-						
-						vm.path = mainService.file.input;
-						vm.src = 'file://'+mainService.file.input;
-						
-						mainService.loading.hide();
-					});
-				}
-				
-				// call python
-				mainService.file.readable('histogram.json', function(err) {
-					if (err) {
-						mainService.loading.show();
-						
-						shell = py.run([
+				mainService.file.readable('histogram.json')
+					.then(function() {
+						laksanakan();
+					})
+					.catch(function(error) {
+						var py = pyService.run([
 							'histogram',
 							mainService.file.input,
 							mainService.file.id,
-						], undefined, undefined, function() {
+						]);
+						
+						py.promise.finally(function() {
 							laksanakan();
 						});
-					} else {
-						laksanakan();
-					}
-				});
+						
+						mainService.loading.show()
+							.catch(function() {
+								pyService.kill(py.shell);
+								mainService.file.clear();
+							});
+					});
 			}
+		};
+		
+		var laksanakan = function() {
+			var histogram = require(mainService.file.dir()+'histogram.json');
+			
+			vm.chart.data[0] = histogram.r;
+			vm.chart.data[1] = histogram.g;
+			vm.chart.data[2] = histogram.b;
+			
+			vm.path = mainService.file.input;
+			vm.src = 'file://'+mainService.file.input;
+			
+			mainService.loading.hide();
 		};
 		
 		vm.onFileChanged = function() {
