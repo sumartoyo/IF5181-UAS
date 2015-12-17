@@ -2,22 +2,20 @@
 	angular.module('app').constant('config', new Config());
 	
 	function Config() {
-		var Route = function(name, title, color) {
-			this.name = name;
-			this.title = title;
-			this.color = color;
-			
-			this.when = '/'+name;
-			this.templateUrl = 'app/'+name+'/'+name+'.html';
-			this.controller = name[0].toUpperCase()+name.substr(1)+'Controller';
-			this.controllerAs = 'vm';
-		};
-		
 		this.links = [
 			new Route('histogram', 'Histogram / Open File', 'red'),
 			new Route('ekualisasi', 'Ekualisasi Histogram', 'orange'),
-			new Route('binary', 'Binary (otsu)', 'aqua'),
+			new Route('binary', 'Binary (Otsu)', 'aqua'),
+			new Route('blur', 'Konvolusi Penyamaran', 'aqua'),
+			new Route('sharpen', 'Konvolusi Penajaman', 'aqua'),
+			new Route('derajat0', 'Konvolusi Derajat 0', 'aqua'),
+			new Route('derajat1', 'Konvolusi Derajat 1', 'aqua'),
+			new Route('derajat2', 'Konvolusi Derajat 2', 'aqua'),
 			new Route('gauss', 'Gaussian Blur', 'aqua'),
+			
+			new Route('chaincode', 'Chaincode / Kode Belok', 'aqua'),
+			new Route('skeleton', 'Penulangan (Zhang Suen)', 'aqua'),
+			new Route('ocr', 'Pengenalan Huruf', 'aqua'),
 		];
 		
 		this.py = {
@@ -28,5 +26,16 @@
 		};
 		
 		this.srcEmpty = 'img/empty.png';
+	};
+	
+	function Route(name, title, color) {
+		this.name = name;
+		this.title = title;
+		this.color = color;
+		
+		this.when = '/'+name;
+		this.templateUrl = 'app/'+name+'/'+name+'.html';
+		this.controller = name[0].toUpperCase()+name.substr(1)+'Controller';
+		this.controllerAs = 'vm';
 	};
 })();

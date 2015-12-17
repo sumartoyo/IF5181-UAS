@@ -6,12 +6,13 @@ import time
 
 import gambar
 import konvolusi
+import chaincode
 
 def main():
     method = sys.argv[1]
     input = sys.argv[2]
     id = sys.argv[3]
-    home = os.path.expanduser('~')+'\\.IF5181-dimas\\'
+    home = os.path.expanduser('~')+'\\.IF5181\\'
     dir = home+id+'\\'
 
     if not os.path.isdir(dir):
@@ -44,15 +45,30 @@ def main():
     
     elif method == 'otsu':
         img = gambar.read(input)
+        
         gray = gambar.to_gray(img)
-        hist = gambar.get_histogram(gray)
-        threshold = gambar.otsu(hist, gray.shape[0]*gray.shape[1])
         gambar.save(gray, dir+'gray.jpg')
-        gambar.save(gray <= threshold, dir+'binary.jpg')
+        
+        bw = gambar.to_bw(gray)
+        gambar.save(bw, dir+'binary.jpg')
     
     elif method == 'gauss':
         img = gambar.read(input)
         gambar.save(konvolusi.gaussian(img), dir+'gauss.jpg')
+    
+    elif method == 'chaincode':
+        img = gambar.read(input)
+        gray = gambar.to_gray(img)
+        bw = gambar.to_bw(gray)
+        gambar.save(bw, dir+'binary.jpg')
+        
+        kopong = gambar.koponging(bw)
+        gambar.save(kopong, dir+'kopong.jpg')
+        
+        code = chaincode.get_chaincode(kopong)
+        belok = chaincode.get_kodebelok(code)
+        json_save(code, dir+'chaincode.json')
+        json_save(belok, dir+'kodebelok.json')
 
 def json_save(obj, path):
     f = open(path, 'w')

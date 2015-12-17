@@ -1,16 +1,24 @@
 import numpy as np
 
 def roll_up(matrix):
-    return np.roll(matrix, -1, 0)
+    result = np.roll(matrix, -1, 0)
+    result[-1] = False if result.dtype == bool else 0
+    return result
 
 def roll_down(matrix):
-    return np.roll(matrix, 1, 0)
+    result = np.roll(matrix, 1, 0)
+    result[0] = False if result.dtype == bool else 0
+    return result
 
 def roll_left(matrix):
-    return np.roll(matrix, -1, 1)
+    result = np.roll(matrix, -1, 1)
+    result[:,-1] = False if result.dtype == bool else 0
+    return result
 
 def roll_right(matrix):
-    return np.roll(matrix, 1, 1)
+    result = np.roll(matrix, 1, 1)
+    result[:,0] = False if result.dtype == bool else 0
+    return result
 
 def rot45(matrix):
     result = matrix.copy()
@@ -27,18 +35,23 @@ def rot45(matrix):
 
 if __name__ == '__main__':
     test = np.asarray([[5, 5, 5], [-3, 0, -3], [-3, -3, -3]])
-    print test
-    rot45(test)
-    print test
-    rot45(test)
-    print test
-    rot45(test)
-    print test
-    rot45(test)
-    print test
-    rot45(test)
-    print test
-    rot45(test)
-    print test
-    rot45(test)
-    print test
+    test = np.asarray([[True, False, True], [False, True, False], [False, False, False]])
+    print roll_up(test)
+    print roll_down(test)
+    print roll_left(test)
+    print roll_right(test)
+    # print test
+    # rot45(test)
+    # print test
+    # rot45(test)
+    # print test
+    # rot45(test)
+    # print test
+    # rot45(test)
+    # print test
+    # rot45(test)
+    # print test
+    # rot45(test)
+    # print test
+    # rot45(test)
+    # print test

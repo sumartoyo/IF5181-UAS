@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import sys
 
+import nph
+
 def read(path):
     img = mpimg.imread(path)
     if img.dtype == 'float32':
@@ -15,7 +17,8 @@ def to_gray(img):
     return img.mean(-1).round().astype(np.uint8)
 
 def to_bw(gray):
-    threshold = threshold_otsu(gray)
+    hist = get_histogram(gray)
+    threshold = otsu(hist, gray.shape[0]*gray.shape[1])
     return gray <= threshold
 
 def to_img(matrix):
@@ -51,16 +54,22 @@ def save(img, path):
     mpimg.imsave(path, to_img(img))
 
 def koponging(bw):
-    # this `probably` eats a lot of memory
-    rolldown = np.roll(bw, 1, 0)
-    rolldown[0] = False
-    rollup = np.roll(bw, -1, 0)
-    rollup[-1] = False
-    rollright = np.roll(bw, 1, 1)
-    rollright[:,0] = False
-    rollleft = np.roll(bw, -1, 1)
-    rollleft[:,-1] = False
-    return bw - (rolldown * rollup * rollright * rollleft)
+    bwr = bw.copy()
+    
+    # remove filler
+    rolldown, rollup = nph.roll_down(bwr), nph.roll_up(bwr)
+    rollright, rollleft = nph.roll_right(bwr), nph.roll_left(bwr)
+    bwr -= bwr * rolldown * rollup * rollright * rollleft
+    
+    # remove zigzag
+    rolldown, rollup = nph.roll_down(bwr), nph.roll_up(bwr)
+    rollright, rollleft = nph.roll_right(bwr), nph.roll_left(bwr)
+    bwr -= bwr * rollup * rollright
+    bwr -= bwr * rollright * rolldown
+    bwr -= bwr * rolldown * rollleft
+    bwr -= bwr * rollleft * rollup
+    
+    return bwr
 
 def get_histogram(channel):
     return np.histogram(channel, range=(0, 256), bins=256)[0]

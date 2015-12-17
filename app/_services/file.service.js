@@ -18,7 +18,7 @@
 			};
 			
 			self.dir = function() {
-				return (process.env.HOME || process.env.USERPROFILE) + '\\.IF5181-dimas\\' + self.id + '\\';
+				return (process.env.HOME || process.env.USERPROFILE) + '\\.IF5181\\' + self.id + '\\';
 			};
 			
 			self.isReadable = function(name) {
