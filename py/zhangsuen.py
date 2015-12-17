@@ -1,4 +1,10 @@
+import sys
 import numpy as np
+import json
+
+import nph
+import gambar
+import chaincode
 
 def to_tulang(bw, step):
     # http://rosettacode.org/wiki/Zhang-Suen_thinning_algorithm
@@ -48,3 +54,83 @@ def get_p(bw, dtype=np.uint8):
     p8 = np.roll(p1, 1, 1)
     p9 = np.roll(p8, 1, 0)
     return (p2, p3, p4, p5, p6, p7, p8, p9)
+
+def penulangan(bw):
+    # remove non Zhang Suen's tulang
+    bwr = np.copy(bw)
+    cblack_l = 0
+    cblack_c = bwr.nonzero()[0].shape[0]
+    while cblack_l != cblack_c:
+        cblack_l = bwr.nonzero()[0].shape[0]
+        bwr[:] = to_tulang(bwr, 1)
+        bwr[:] = to_tulang(bwr, 2)
+        cblack_c = bwr.nonzero()[0].shape[0]
+    bwr[:] = gambar.koponging(bwr)
+    return bwr
+
+def get_identity(tulang):
+    rollup, rolldown, rollleft, rollright = nph.roll_all(tulang)
+    rollupleft = nph.roll_left(rollup)
+    rollupright = nph.roll_right(rollup)
+    rolldownleft = nph.roll_left(rolldown)
+    rolldownright = nph.roll_right(rolldown)
+    
+    neighbors = tulang.astype(np.uint8)*(0+rollup+rolldown+rollleft+rollright+rollupleft+rollupright+rolldownleft+rolldownright)
+    ujung_nonzero = (neighbors == 1).nonzero()
+    simpangan_nonzero = (neighbors == 3).nonzero()
+    
+    ujung = []
+    for i in range(0, ujung_nonzero[0].shape[0]):
+        ujung.append((ujung_nonzero[0][i], ujung_nonzero[1][i]))
+    
+    simpangan = []
+    for i in range(0, simpangan_nonzero[0].shape[0]):
+        simpangan.append((simpangan_nonzero[0][i], simpangan_nonzero[1][i]))
+    
+    # remove redundant simpangan
+    i = 0
+    while i < len(simpangan):
+        yi, xi = simpangan[i]
+        j = i+1
+        while j < len(simpangan):
+            yj, xj = simpangan[j]
+            if yi-1 <= yj <= yj+1 and xi-1 <= xj <= xi+1:
+                simpangan.pop(j)
+                j -= 1
+            j += 1
+        i += 1
+    
+    return (ujung, simpangan)
+
+def get_chaincode(tulang):
+    tulangr = tulang.copy()
+    codes = []
+    
+    ujung, simpangan = get_identity(tulangr)
+    while len(ujung) > 0:
+        y, x = ujung[0]
+        if tulangr[y, x]:
+            code = chaincode.iterate_chaincode(tulangr, y, x)
+            if len(code) > 0:
+                codes.append(code)
+        ujung, simpangan = get_identity(tulangr)
+    
+    codes.extend(chaincode.get_chaincode(tulangr))
+    
+    return codes
+
+if __name__ == ('__main__'):
+    img = gambar.read(sys.argv[1])
+    gray = gambar.to_gray(img)
+    bw = gambar.to_bw(gray)
+    
+    tulang = penulangan(bw)
+    ujung, simpangan = get_identity(tulang)
+    json_data = {
+        'ujung': [list((int(y), int(x))) for y, x in ujung],
+        'simpangan': [list((int(y), int(x))) for y, x in simpangan],
+    }
+    print json.dumps(json_data)
+    # code = get_chaincode(tulang)
+    # belok = chaincode.get_kodebelok(code)
+    # print belok

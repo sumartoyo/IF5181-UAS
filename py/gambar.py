@@ -57,17 +57,25 @@ def koponging(bw):
     bwr = bw.copy()
     
     # remove filler
-    rolldown, rollup = nph.roll_down(bwr), nph.roll_up(bwr)
-    rollright, rollleft = nph.roll_right(bwr), nph.roll_left(bwr)
+    rollup, rolldown, rollleft, rollright = nph.roll_all(bwr)
     bwr -= bwr * rolldown * rollup * rollright * rollleft
     
     # remove zigzag
-    rolldown, rollup = nph.roll_down(bwr), nph.roll_up(bwr)
-    rollright, rollleft = nph.roll_right(bwr), nph.roll_left(bwr)
-    bwr -= bwr * rollup * rollright
-    bwr -= bwr * rollright * rolldown
-    bwr -= bwr * rolldown * rollleft
-    bwr -= bwr * rollleft * rollup
+    rollup, rollright = nph.roll_up(bwr), nph.roll_right(bwr)
+    rolldownleft = nph.roll_left(nph.roll_down(bwr))
+    bwr -= bwr * rollup * rollright * (rolldownleft == False)
+    
+    rollright, rolldown = nph.roll_right(bwr), nph.roll_down(bwr)
+    rollupleft = nph.roll_left(nph.roll_up(bwr))
+    bwr -= bwr * rollright * rolldown * (rollupleft == False)
+    
+    rolldown, rollleft = nph.roll_down(bwr), nph.roll_left(bwr)
+    rollupright = nph.roll_right(nph.roll_up(bwr))
+    bwr -= bwr * rolldown * rollleft * (rollupright == False)
+    
+    rollleft, rollup = nph.roll_left(bwr), nph.roll_up(bwr)
+    rolldownright = nph.roll_right(nph.roll_down(bwr))
+    bwr -= bwr * rollleft * rollup * (rolldownright == False)
     
     return bwr
 

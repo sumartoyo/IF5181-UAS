@@ -20,6 +20,9 @@ def roll_right(matrix):
     result[:,0] = False if result.dtype == bool else 0
     return result
 
+def roll_all(matrix):
+    return (roll_up(matrix), roll_down(matrix), roll_left(matrix), roll_right(matrix))
+
 def rot45(matrix):
     result = matrix.copy()
     pojok = result[0, 0]

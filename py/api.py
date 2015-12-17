@@ -7,6 +7,7 @@ import time
 import gambar
 import konvolusi
 import chaincode
+import zhangsuen
 
 def main():
     method = sys.argv[1]
@@ -69,6 +70,26 @@ def main():
         belok = chaincode.get_kodebelok(code)
         json_save(code, dir+'chaincode.json')
         json_save(belok, dir+'kodebelok.json')
+    
+    elif method == 'skeleton':
+        img = gambar.read(input)
+        gray = gambar.to_gray(img)
+        bw = gambar.to_bw(gray)
+        gambar.save(bw, dir+'binary.jpg')
+        
+        tulang = zhangsuen.penulangan(bw)
+        gambar.save(tulang, dir+'tulang.jpg')
+        
+        ujung, simpangan = zhangsuen.get_identity(tulang)
+        json_save({
+            'ujung': [[int(y), int(x)] for y, x in ujung],
+            'simpangan': [[int(y), int(x)] for y, x in simpangan],
+        }, dir+'tulang-identity.json')
+        
+        code = zhangsuen.get_chaincode(tulang)
+        belok = chaincode.get_kodebelok(code)
+        json_save(code, dir+'tulang-chaincode.json')
+        json_save(belok, dir+'tulang-kodebelok.json')
 
 def json_save(obj, path):
     f = open(path, 'w')

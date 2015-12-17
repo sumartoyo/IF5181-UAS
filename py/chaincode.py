@@ -12,13 +12,17 @@ import gambar
 # kir -
 
 def get_chaincode(kopong):
+    kopongr = kopong.copy()
     codes = []
-    for y in range(0, kopong.shape[0]):
-        for x in range(0, kopong.shape[1]):
-            if kopong[y, x]:
-                code = iterate_chaincode(kopong, y, x)
-                if len(code) > 0:
-                    codes.append(code)
+    
+    nonzero = kopongr.nonzero()
+    while nonzero[0].shape[0] > 0:
+        y, x = nonzero[0][0], nonzero[1][0]
+        code = iterate_chaincode(kopongr, y, x)
+        if len(code) > 0:
+            codes.append(code)
+        nonzero = kopongr.nonzero()
+    
     return codes
 
 def iterate_chaincode(kopong, y, x):
