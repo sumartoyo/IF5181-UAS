@@ -2,11 +2,12 @@
 <aside class="main-sidebar" ng-controller="NavController as vm">
 	<section class="sidebar">
 		<ul class="sidebar-menu">
-			<li ng-repeat="link in vm.links" ng-class="{active: vm.$route.current.name == link.name}">
-				<a href="#{{link.when}}">
+			<li ng-repeat="link in vm.links" ng-class="{active: link.length == undefined && vm.$route.current.name == link.name}">
+				<a href="#{{link.when}}" ng-if="link.length == undefined">
 					<i class="fa fa-circle-o text-{{link.color}}"></i>
 					<span>{{link.title}}</span>
 				</a>
+				<hr ng-if="link.length != undefined">
 			</li>
 		</ul>
 	</section>

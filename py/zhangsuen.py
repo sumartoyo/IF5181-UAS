@@ -77,7 +77,7 @@ def get_identity(tulang):
     
     neighbors = tulang.astype(np.uint8)*(0+rollup+rolldown+rollleft+rollright+rollupleft+rollupright+rolldownleft+rolldownright)
     ujung_nonzero = (neighbors == 1).nonzero()
-    simpangan_nonzero = (neighbors == 3).nonzero()
+    simpangan_nonzero = (neighbors > 2).nonzero()
     
     ujung = []
     for i in range(0, ujung_nonzero[0].shape[0]):

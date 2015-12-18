@@ -53,6 +53,45 @@ def main():
         bw = gambar.to_bw(gray)
         gambar.save(bw, dir+'binary.jpg')
     
+    elif method == 'derajat0':
+        img = gambar.read(input)
+        
+        gray = gambar.to_gray(img)
+        gambar.save(gray, dir+'gray.jpg')
+        
+        average = konvolusi.derajat0(gray, 'average')
+        gambar.save(average, dir+'derajat0-average.jpg')
+        
+        homogen = konvolusi.derajat0(gray, 'homogen')
+        gambar.save(homogen, dir+'derajat0-homogen.jpg')
+        
+        difference = konvolusi.derajat0(gray, 'difference')
+        gambar.save(difference, dir+'derajat0-difference.jpg')
+    
+    elif method == 'derajat1':
+        img = gambar.read(input)
+        
+        gray = gambar.to_gray(img)
+        gambar.save(gray, dir+'gray.jpg')
+        
+        sobel = konvolusi.derajat1(gray, 'sobel')
+        gambar.save(sobel, dir+'derajat1-sobel.jpg')
+        
+        prewitt = konvolusi.derajat1(gray, 'prewitt')
+        gambar.save(prewitt, dir+'derajat1-prewitt.jpg')
+    
+    elif method == 'derajat2':
+        img = gambar.read(input)
+        
+        gray = gambar.to_gray(img)
+        gambar.save(gray, dir+'gray.jpg')
+        
+        kirsch = konvolusi.derajat2(gray, 'kirsch')
+        gambar.save(kirsch, dir+'derajat2-kirsch.jpg')
+        
+        prewitt = konvolusi.derajat2(gray, 'prewitt')
+        gambar.save(prewitt, dir+'derajat2-prewitt.jpg')
+    
     elif method == 'gauss':
         img = gambar.read(input)
         gambar.save(konvolusi.gaussian(img), dir+'gauss.jpg')

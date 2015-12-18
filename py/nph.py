@@ -1,27 +1,27 @@
 import numpy as np
 
-def roll_up(matrix):
+def roll_up(matrix, pad=0):
     result = np.roll(matrix, -1, 0)
-    result[-1] = False if result.dtype == bool else 0
+    result[-1] = pad
     return result
 
-def roll_down(matrix):
+def roll_down(matrix, pad=0):
     result = np.roll(matrix, 1, 0)
-    result[0] = False if result.dtype == bool else 0
+    result[0] = pad
     return result
 
-def roll_left(matrix):
+def roll_left(matrix, pad=0):
     result = np.roll(matrix, -1, 1)
-    result[:,-1] = False if result.dtype == bool else 0
+    result[:, -1] = pad
     return result
 
-def roll_right(matrix):
+def roll_right(matrix, pad=0):
     result = np.roll(matrix, 1, 1)
-    result[:,0] = False if result.dtype == bool else 0
+    result[:, 0] = pad
     return result
 
-def roll_all(matrix):
-    return (roll_up(matrix), roll_down(matrix), roll_left(matrix), roll_right(matrix))
+def roll_all(matrix, pad=0):
+    return (roll_up(matrix, pad), roll_down(matrix, pad), roll_left(matrix, pad), roll_right(matrix, pad))
 
 def rot45(matrix):
     result = matrix.copy()

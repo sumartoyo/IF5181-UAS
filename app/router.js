@@ -3,7 +3,9 @@
 	
 	function routing($routeProvider, config) {
 		config.links.forEach(function(link) {
-			$routeProvider.when(link.when, link);
+			if (typeof link == 'object') {
+				$routeProvider.when(link.when, link);
+			}
 		});
 		$routeProvider.otherwise({
 			redirectTo: config.links[0].when

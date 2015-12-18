@@ -6,16 +6,18 @@
 			new Route('histogram', 'Histogram / Open File', 'red'),
 			new Route('ekualisasi', 'Ekualisasi Histogram', 'orange'),
 			new Route('binary', 'Binary (Otsu)', 'aqua'),
-			new Route('blur', 'Konvolusi Penyamaran', 'aqua'),
-			new Route('sharpen', 'Konvolusi Penajaman', 'aqua'),
 			new Route('derajat0', 'Konvolusi Derajat 0', 'aqua'),
 			new Route('derajat1', 'Konvolusi Derajat 1', 'aqua'),
 			new Route('derajat2', 'Konvolusi Derajat 2', 'aqua'),
 			new Route('gauss', 'Gaussian Blur', 'aqua'),
-			
+			'gutter1',
 			new Route('chaincode', 'Chaincode / Kode Belok', 'aqua'),
 			new Route('skeleton', 'Penulangan (Zhang Suen)', 'aqua'),
 			new Route('ocr', 'Pengenalan Huruf', 'aqua'),
+			'gutter2',
+			new Route('faceWarna', 'Wajah (Warna)', 'aqua'),
+			new Route('faceBentuk', 'Wajah (Bentuk)', 'aqua'),
+			new Route('faceDetection', 'Pengenalan Wajah', 'aqua'),
 		];
 		
 		this.py = {
