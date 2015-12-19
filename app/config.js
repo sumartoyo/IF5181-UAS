@@ -17,7 +17,7 @@
 			'gutter2',
 			new Route('faceWarna', 'Wajah (Warna)', 'aqua'),
 			new Route('faceBentuk', 'Wajah (Bentuk)', 'aqua'),
-			new Route('faceDetection', 'Pengenalan Wajah', 'aqua'),
+			new Route('faceRecognition', 'Pengenalan Wajah', 'aqua'),
 		];
 		
 		this.py = {

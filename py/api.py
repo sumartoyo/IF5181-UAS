@@ -150,6 +150,14 @@ def main():
         wajahs = wajah.get_wajahs(masker)
         kotaked = wajah.draw_kotak(img, wajahs)
         gambar.save(kotaked, dir+'face-kotak.jpg')
+    
+    elif method == 'face-bentuk':
+        img = gambar.read(input)
+        wajah.limatitik(img)
+        wajah.titikobjek(img)
+    
+    elif method == 'face-recognition':
+        facer.main(input)
 
 def json_save(obj, path):
     f = open(path, 'w')
