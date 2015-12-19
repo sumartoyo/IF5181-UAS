@@ -9,6 +9,7 @@ import konvolusi
 import chaincode
 import zhangsuen
 import ocr
+import wajah
 
 def main():
     method = sys.argv[1]
@@ -138,6 +139,17 @@ def main():
         json_save({
             'result': result
         }, dir+'ocr-result.json')
+    
+    elif method == 'face-warna':
+        img = gambar.read(input)
+        
+        masker = wajah.get_masker(img)
+        maskered = wajah.draw_masker(img, masker)
+        gambar.save(maskered, dir+'face-masker.jpg')
+        
+        wajahs = wajah.get_wajahs(masker)
+        kotaked = wajah.draw_kotak(img, wajahs)
+        gambar.save(kotaked, dir+'face-kotak.jpg')
 
 def json_save(obj, path):
     f = open(path, 'w')
