@@ -1,4 +1,5 @@
 import sys
+import numpy as np
 
 import gambar
 
@@ -87,6 +88,13 @@ def get_arah(dir_last, dir):
         return '-'
     else:
         return None
+
+def get_pixels(kopong):
+    return np.asarray(kopong.nonzero())[[1,0]] # returns [[x1, x2, ..., xn],
+                                               #          [y1, y2, ..., yn]]
+
+def get_center(pixels):
+    return pixels.mean(1)
 
 if __name__ == ('__main__'):
     img = gambar.read(sys.argv[1])

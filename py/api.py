@@ -8,6 +8,7 @@ import gambar
 import konvolusi
 import chaincode
 import zhangsuen
+import ocr
 
 def main():
     method = sys.argv[1]
@@ -23,6 +24,8 @@ def main():
             os.mkdir(home)
         os.mkdir(dir)
 
+    os.chdir('py')
+    
     if method == 'histogram':
         img = gambar.read(input)
         hist = gambar.get_histogram(img)
@@ -129,6 +132,12 @@ def main():
         belok = chaincode.get_kodebelok(code)
         json_save(code, dir+'tulang-chaincode.json')
         json_save(belok, dir+'tulang-kodebelok.json')
+    
+    elif method == 'ocr':
+        result = ocr.main(input)
+        json_save({
+            'result': result
+        }, dir+'ocr-result.json')
 
 def json_save(obj, path):
     f = open(path, 'w')

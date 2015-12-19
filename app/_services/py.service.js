@@ -50,7 +50,7 @@
 						
 						fileService.isReadable(fileCheck)
 							.then(function() {
-								done(resolve)
+								done(resolve);
 							})
 							.catch(function(error) {
 								
@@ -61,8 +61,11 @@
 								]);
 								
 								py.promise
-									.finally(function() {
-										done(resolve)
+									.then(function() {
+										done(resolve);
+									})
+									.catch(function(error) {
+										loadingService.setText('Error', error.message, 'Close');
 									});
 								
 								loadingService.show()

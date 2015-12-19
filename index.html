@@ -52,16 +52,10 @@
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">×</span>
-				</button> -->
-				<h4 class="modal-title">Loading...</h4>
+				<h4 class="modal-title" id="modalTitle">Loading...</h4>
 			</div>
-			<!-- <div class="modal-body">
-				<p>One fine body…</p>
-			</div> -->
+			<div class="modal-body" id="modalBody"><p></p></div>
 			<div class="modal-footer">
-				<!-- <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Close</button> -->
 				<button type="button" class="btn btn-outline" id="modalCancel">Cancel Operation</button>
 			</div>
 		</div>
@@ -113,6 +107,7 @@ Chart.defaults.Line.datasetStrokeWidth = 1;
 <script src="app/gauss/gauss.js"></script>
 <script src="app/chaincode/chaincode.js"></script>
 <script src="app/skeleton/skeleton.js"></script>
+<script src="app/ocr/ocr.js"></script>
 
 <script>
 function refresh() {
