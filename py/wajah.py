@@ -10,10 +10,11 @@ def get_masker(rgb):
     masker = (r > g) * (r > b) # face is redder
     masker *= g >= b if g[masker].sum() > b[masker].sum() else b >= g
     
-    hist = gambar.get_histogram(r)
-    threshold = gambar.otsu(hist, r.shape[0]*r.shape[1])
-    tmax = max(threshold, r[masker].mean())
-    masker *= r >= tmax/2.0
+    if masker.nonzero()[0].shape[0] > 0:
+        hist = gambar.get_histogram(r)
+        threshold = gambar.otsu(hist, r.shape[0]*r.shape[1])
+        tmax = max(threshold, r[masker].mean())
+        masker *= r >= tmax/2.0
     
     return masker
 

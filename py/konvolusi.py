@@ -143,7 +143,7 @@ def derajat2(gray, type):
         results.append(convolve(gray, kernel))
         kernel[:] = nph.rot45(np.array(kernel))
     
-    for i in range(1, 8):
+    for i in range(0, 8):
         result[:] = np.maximum(result, results[i])
     
     result[:] = normalize(result)
