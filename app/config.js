@@ -4,25 +4,25 @@
 	function Config() {
 		this.links = [
 			new Route('histogram', 'Histogram / Open File', 'red'),
-			new Route('ekualisasi', 'Ekualisasi Histogram', 'orange'),
-			new Route('binary', 'Binary (Otsu)', 'aqua'),
-			new Route('derajat0', 'Konvolusi Derajat 0', 'aqua'),
-			new Route('derajat1', 'Konvolusi Derajat 1', 'aqua'),
-			new Route('derajat2', 'Konvolusi Derajat 2', 'aqua'),
-			new Route('gauss', 'Gaussian Blur', 'aqua'),
+			new Route('ekualisasi', 'Ekualisasi Histogram', 'green'),
+			new Route('binary', 'Binary (Otsu)', 'blue'),
+			new Route('derajat0', 'Konvolusi Derajat 0', 'red'),
+			new Route('derajat1', 'Konvolusi Derajat 1', 'green'),
+			new Route('derajat2', 'Konvolusi Derajat 2', 'blue'),
+			new Route('gauss', 'Gaussian Blur', 'red'),
 			'gutter1',
-			new Route('chaincode', 'Chaincode / Kode Belok', 'aqua'),
-			new Route('skeleton', 'Penulangan (Zhang Suen)', 'aqua'),
-			new Route('ocr', 'Pengenalan Huruf', 'aqua'),
+			new Route('chaincode', 'Chaincode / Kode Belok', 'green'),
+			new Route('skeleton', 'Penulangan (Zhang Suen)', 'blue'),
+			new Route('ocr', 'Pengenalan Huruf', 'red'),
 			'gutter2',
-			new Route('faceWarna', 'Wajah (Warna)', 'aqua'),
-			new Route('faceBentuk', 'Wajah (Bentuk)', 'aqua'),
-			new Route('faceRecognition', 'Pengenalan Wajah', 'aqua'),
+			new Route('faceWarna', 'Wajah (Warna)', 'green'),
+			new Route('faceBentuk', 'Wajah (Bentuk)', 'blue'),
+			new Route('faceRecognition', 'Pengenalan Wajah', 'red'),
 		];
 		
 		this.py = {
 			defaultOptions: {
-				pythonPath: 'C:\\exe\\WinPython\\python-2.7.10.amd64\\python.exe',
+				pythonPath: 'WinPython\\python-2.7.10.amd64\\python.exe',
 				script: 'py\\api.py',
 			}
 		};
